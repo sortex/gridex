@@ -1,0 +1,506 @@
+/* slick grid theme ----------------------------------- */
+
+/*
+IMPORTANT:
+In order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.
+No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS
+classes should alter those!
+*/
+
+.grid-header {
+  margin: 0; padding: 10px 10px 10px 15px;
+  background-color: #E3E3E3;
+  border-bottom: 1px solid #D8D9D9;
+  border-top: 1px solid #D8D9D9;
+  color: #535353;
+  font-size: 13px; font-weight: bold; line-height: 20px;
+  text-align: left;
+
+  label {
+    display: inline-block;
+    cursor: default;
+    font-weight: bold;
+    margin: 0;
+  }
+}
+
+.grid-controls {
+  float: left; width: 100%; margin: 0 0 4px;
+
+  select { float: right; height: 22px; padding: 2px 2px 2px 1px; margin-top: 1px; }
+
+  .btn-group { float: right; margin-left: $buttonSideMargin }
+}
+
+div.datagrid {
+  background: #fff; outline: 0;
+  height: 541px; margin: 0; clear: both;
+  @include border-radius(6px);
+  border-right: 1px solid $tableBorderSides;
+  border-bottom: 1px solid $tableBorderBottom;
+  border-left: 1px solid $tableBorderSides;
+
+  .slick-header {
+    background: #f2f5f7;
+    @extend .table-head-font;
+    @include border-radius(6px 6px 0 0);
+    border-top: solid 1px $tableBorderTop;
+    border-bottom: 0;
+
+    .slick-header-column { @extend .table-head-font; background: transparent }
+
+    .slick-header-column {
+      height: 22px !important;
+      border-left: 0;
+      border-right: solid 1px $innerBorderColor;
+
+      &:first-child { @include border-radius(6px 0 0 0); }
+      &:last-child { border-right-color: #F2F5F7; @include border-radius(0 6px 0 0); }
+    }
+
+    .slick-header-columns, .slick-headerrow-columns {
+      @include box-shadow(0 0 5px 2px rgba(0, 0, 0, 0.05) inset);
+      //white-space: normal;
+      //border-top: solid 1px $tableBorderTop;
+      border-bottom: solid 1px $innerBorderColor;
+    }
+
+    .slick-header-column:hover, .slick-header-column-active {
+        background-color: #E3E5E8;
+    }
+
+    .slick-header-column-sorted { background-color: #FCD16B; color: #282828 !important;
+      &:hover {  background-color: #F2BC46 }
+    }
+
+    .slick-sort-indicator { margin-left: 0; }
+    .slick-sort-indicator-desc { @extend .icon.sort-desc; }
+    .slick-sort-indicator-asc { @extend .icon.sort-asc; }
+  }
+
+  // No results message
+  h2.no-data {
+    color: #858585; border: 0; background: 0;
+    margin: 220px 0 0;
+    width: 100%; text-align: center;
+    line-height: 18px; font-size: 18px;
+  }
+
+  .slick-column-name input { margin: 2px 0 0 4px; }
+  .slick-cell-checkboxsel input { margin: 14px 0 0 5px; }
+
+  .slick-row {
+    position: absolute;
+    background: #fff; // #f3f8fc;
+    border: 0;
+    line-height: 46px;
+    @include border-radius(6px);
+
+    &.odd { background: $datagridOddBG }
+    &:hover { background: $datagridHover !important;
+      .slick-cell { color: #282828; }
+    }
+
+    .slick-cell {
+      font-size: 13px;
+      color: #666;
+      padding: 1px 3px 2px;
+      border-bottom: solid 1px $innerBorderColor;
+      border-right: solid 1px $innerBorderColor;
+      border-left: 0;
+      border-top: 0;
+
+      &:last-child { border-right: 0; }
+
+      a { color: $datagridLink }
+
+      .title {
+        float: left; line-height: 18px; margin: 7px 0 0 4px;
+
+        & > a { color: #282828; font-weight: bold }
+      }
+
+      .date_info { margin: 5px 0 0; line-height: 17px; }
+
+      div.buttons {
+        display: none; font-size: 12px;
+
+        a:hover { text-decoration: underline; }
+      }
+
+      div.icon { margin: 12px 0 11px 4px }
+
+      &.centered {
+        text-align: center;
+
+        div.icon { float: none; display: inline-table; margin: 13px 2px 0 }
+        .btn-grey { float: none }
+        .app-icon { float: none; margin: 0; }
+      }
+
+      &.icons {
+        img {
+          margin-left: -20px; position: relative; z-index: 0;
+          background: #fff; @include box-shadow(0 0 1px rgba(0,0,0,.5));
+
+          &:hover { z-index: 1; @include box-shadow(0 0 4px rgba(0,0,0,.7)); }
+        }
+
+        img:first-child { margin-left: 0 }
+      }
+
+      &.hide-input {
+        input { display: none }
+      }
+    }
+
+    &:hover {
+      .title > a { color: #000; }
+
+      div.buttons { display: block }
+    }
+
+    &.selected {
+      z-index: 10;
+      background: $datagridSelected;
+    }
+
+    //a { color: $linkColor }
+
+    // statuses colors
+    span {
+      &.status { display: block; padding: 3px; line-height: 14px; background-color: #fff; border: 3px solid #dcdcdc; color: #535353 }
+
+      /* Campaign statuses */
+      &.status_60001 { border-color: #a9e7fd; color: #029dd3 } /* New */
+      &.status_60002 { border-color: #dcdcdc; color: #535353 } /* Scheduled */
+      &.status_60003 { border-color: #fbe88f; color: #ec9601 } /* In Progress */
+      &.status_60004 { border-color: #d6ef62; color: #768f01 } /* Completed */
+      &.status_60005 { border-color: #fa9995; color: #af2330 } /* Error  */
+      &.status_60006, /* Cancelled  */
+      &.status_60007 { border-color: #fa9995; color: #af2330 } /* Deleted  */
+
+      /* Reports statuses (Import & Export) */
+      &.status_40001,  /* Import - Processing */
+      &.status_40002,  /* Import - Processing */
+      &.status_50001,  /* Export - Processing */
+      &.status_50002   /* Export - Processing */     { border-color: #fbe88f; color: #ec9601 }
+
+      &.status_40003,  /* Import - Completed */
+      &.status_50003   /* Export - Completed */      { border-color: #d6ef62; color: #768f01 }
+
+      &.status_40004,  /* Import - Error */
+      &.status_50004,  /* Export - Error */
+      &.status_90001   /* Import/Export - Error */   { border-color: #fa9995; color: #af2330 }
+
+      /* More statuses */
+      &.status_Active   { border-color: #d6ef62; color: #768f01 }
+      &.status_Approved { border-color: #d6ef62; color: #768f01 }
+      &.status_Inactive { border-color: #fa9995; color: #af2330 }
+      &.status_Test     { border-color: #dcdcdc; color: #535353 }
+      &.status_Pending  { border-color: #dcdcdc; color: #535353 }
+      &.status_Deleted  { border-color: #fa9995; color: #af2330 }
+    }
+  }
+
+  /* slickgrid in grouped mode */
+  &.grouped .slick-row {
+    .slick-cell.r0 { padding-left: 10px }
+    &.odd { background: transparent }
+    &.slick-group {
+      background: #f0f0f0 !important;
+      .slick-cell.r0 { padding-left: 0 }
+    }
+  }
+}
+
+.loading-indicator {
+  display: inline-block;
+  padding: 12px;
+  background: white;
+  -opacity: 0.5;
+  color: black;
+  font-weight: bold;
+  z-index: 1000;
+  border: 1px solid #ddd;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-box-shadow: 0 0 5px grey;
+  -webkit-box-shadow: 0px 0px 5px grey;
+  -text-shadow: 1px 1px 1px white;
+
+  label {
+    cursor: default;
+    padding-left: 20px;
+    background: url('../img/icons/loading.gif') no-repeat 0 0;
+  }
+}
+
+.cell-selection {
+	border-right-color: silver;
+	border-right-style: solid;
+	background: #f5f5f5;
+	color: gray;
+	text-align: right;
+	font-size: 10px;
+}
+
+.slick-row.selected .cell-selection {
+  background-color: transparent; /* show default selected row background */
+}
+
+.slick-column-name { float: left; font-size: 12px; cursor: pointer; line-height: 24px; }
+
+.slick-headerrow {
+  background: #f5f5f5;
+
+  .slick-headerrow-column {
+    background: transparent;
+    border-bottom: 0;
+    height: 100%;
+    font-size: 12px; color: #18a9dc; font-weight: bold;
+
+    &.r0 { color: #484848; }
+    &.ui-state-default { padding: 5px }
+  }
+}
+
+.slick-row.ui-state-active {
+  background: #F5F7D7;
+}
+
+.slick-group {
+  border-bottom: 2px solid silver;
+}
+
+.slick-group-toggle {
+  cursor: pointer;
+  margin: 1px 7px 0 4px;
+  padding: 2px 1px 2px 4px;
+}
+
+.slick-group-totals {
+  color: gray;
+  background: white;
+}
+
+.slick-cell.selected {
+  background-color: $datagridSelected;
+}
+
+.slick-cell.active {
+  border-color: gray;
+  border-style: solid;
+}
+
+.slick-cell.saving {
+  background-image: url('../img/icons/loading.gif');
+  background-position: 96% center;
+  background-repeat: no-repeat;
+}
+
+.slick-cell .ui-spinner {
+  position: static;
+
+  .editor-text { margin: 0; text-align: center; border: 0 }
+
+  .ui-spinner-button { height: 25.5px; margin: 0; @include border-radius(0); }
+}
+
+.slick-sortable-placeholder {
+  background: silver !important;
+}
+
+.slick-row[row$="1"], .slick-row[row$="3"], .slick-row[row$="5"], .slick-row[row$="7"], .slick-row[row$="9"] {
+  background: #fafafa;
+}
+
+.slick-row.ui-state-active {
+  background: #F5F7D7;
+}
+
+.slick-row.loading {
+  opacity: 0.5;
+  filter: alpha(opacity = 50);
+}
+
+.slick-cell.invalid {
+  border-color: red;
+}
+
+/* pagination ----------------------------------- */
+
+.pagination-container {
+  float: right;
+}
+
+.slick-pager {
+  margin: 0 0 10px;
+  float: left; width: 100%;
+}
+
+.slick-pager .slick-pager-status {
+  display: inline-block;
+  padding: 8px 6px 6px;
+}
+
+.slick-pager .ui-icon-container {
+  display: inline-block;
+  margin: 2px;
+  border-color: gray;
+}
+
+.slick-pager .slick-pager-nav {
+  display: inline-block;
+  float: left;
+  padding: 6px 2px 2px;
+}
+
+.slick-pager .slick-pager-settings {
+  display: block;
+  float: right;
+  padding: 6px 2px 2px;
+}
+
+.slick-pager .slick-pager-settings * {
+  vertical-align: middle;
+}
+
+.slick-pager .slick-pager-settings a {
+  padding: 2px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.slick-pager .pagination {
+  float: right; direction: ltr; text-align: left; padding: 10px 0 0; margin: 0;
+
+  a, & > span {
+    float: left;
+    padding: 3px 7px 3px 6px;
+    margin-left: 5px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #d7d7d7;
+    color: #B5B3B3;
+    @include border-radius(3px);
+  }
+
+  a {
+    text-decoration: none;
+    background-color: #fff;
+
+    &:hover { border: 1px solid #aaa }
+  }
+
+  .current {
+    @extend .btn-grey;
+    margin-right: 0; padding: 3px 6px 2px;
+
+    &.next, &.prev { opacity: 0.4 }
+  }
+
+  .next, .prev {
+    @extend .btn-grey;
+    margin-right: 0; padding: 1px 0;
+  }
+
+  .next span { @extend .icon.expand; }
+  .prev span { @extend .icon.collapse; }
+}
+
+
+/* column picker -------------------------------- */
+
+.slick-columnpicker {
+  border: 2px solid #ACACAC;
+  background: #FAFAFA;
+  padding: 0 0 10px;
+  -moz-box-shadow: 2px 2px 2px silver;
+  -webkit-box-shadow: 2px 2px 2px silver;
+  min-width: 100px;
+  max-width: 200px;
+  cursor: default;
+  z-index: 20;
+
+  .icon.remove {
+    float: right;
+    cursor: pointer;
+  }
+
+  h2 {
+    display: block;
+    margin: 10px;
+    width: auto;
+    font-weight: normal;
+    font-family: inherit;
+    font-size: 12px;
+  }
+
+  ul {
+    clear: both;
+    padding: 0 10px;
+  }
+
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: none;
+  }
+
+  input {
+    margin: 4px;
+    top: 0;
+    vertical-align: middle;
+  }
+
+  li a {
+    display: block;
+    padding: 4px;
+    font-weight: bold;
+  }
+
+  li a:hover {
+    background: white;
+  }
+}
+
+/* scroll-bar ----------------------------------- */
+
+.slick-viewport { overflow-x: hidden !important }
+
+.slick-viewport::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.slick-viewport::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(85, 85, 85, 0.8);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+.slick-viewport::-webkit-scrollbar-track {
+  background: rgba(159, 159, 159, 1);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.slick-viewport::-webkit-scrollbar-button {
+  background: rgba(239, 239, 239, 1);
+}
+
+.slick-viewport::-webkit-scrollbar-button:end:increment {
+  background: url("../img/icons/20x20.png") no-repeat -921px -2px;
+}
+
+.slick-viewport::-webkit-scrollbar-button:start:decrement {
+  background: url("../img/icons/20x20.png") no-repeat -942px -2px;
+}
+
+.slick-viewport::-webkit-scrollbar-button:start:decrement,
+.slick-viewport::-webkit-scrollbar-button:end:increment {
+  background-color: #e5e5e5;
+  border-left-color: #c9caca; border-right-color: #c9caca; border-top-color: #cacbcb ; border-bottom-color: #a0a1a1;
+}

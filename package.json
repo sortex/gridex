@@ -1,0 +1,13 @@
+{
+	"amd": {},
+	"volo": {
+		"dependencies": {
+			"jquery": "github:jquery/jquery/2.0.1",
+			"slickgrid": "github:sortex/amdjs-SlickGrid/master",
+			"jquery.pagination": "github:sortex/amdjs-jquery.pagination/master#src/jquery.pagination.js",
+			"moment": "github:timrwood/moment/2.0.0",
+			"jquery.cookie": "github:carhartl/jquery-cookie/master#./jquery.cookie.js",
+			"jquery.event": "github:sortex/amdjs-jquery.event/master"
+		}
+	}
+}
