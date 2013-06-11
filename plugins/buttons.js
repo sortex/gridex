@@ -20,7 +20,7 @@ define(['jquery'], function ($) {
 
 		var _buttons = '';
 		$.each(_options.buttons, function (i, button) {
-			_buttons += '<span><a href="#" class="info icon '+button['class']+'" rel="'+(button.rel || button['class'])+'" title="'+button.label+'" data-index="'+i+'">&nbsp;</a></span>';
+			_buttons += '<span><a href="#" class="info '+(button.title ? '' : 'icon')+' '+button['class']+'" rel="'+(button.rel || button['class'])+'" '+(button.label ? 'title="'+button.label+'"' : '')+' data-index="'+i+'">'+(button.title ? button.title : '&nbsp;')+'</a></span>';
 		});
 
 		var _ctrls = $('<div />').append(_buttons);
@@ -60,16 +60,19 @@ define(['jquery'], function ($) {
 		}
 
 		function handleEnter(e) {
-			var $row    = $(e.target).closest('.slick-cell').parent(),
-				row_idx = $row.attr('row'),
-				$toggle = $row.find('a.handler:first');
+			var cell  = _grid.getCellFromEvent(e),
+				$cell = $(_grid.getCellNode(cell.row, cell.cell)),
+				$toggle;
+
+			if ( ! $cell.length) return null;
+
+			$toggle = $cell.parent('.slick-row').find('a.handler:first');
 
 			if ($toggle.hasClass('handler') && ! $toggle.data('expand')) {
-
 				// See if there's a button strip next to the handler,
 				var $btns    = $toggle.next(),
 					// Grab record data context
-					dataContext = _grid.getDataItem(row_idx);
+					dataContext = _grid.getDataItem(cell.row);
 
 				if ( ! dataContext) return;
 

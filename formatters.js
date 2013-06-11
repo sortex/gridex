@@ -77,14 +77,15 @@ define(['jquery', 'moment', 'utils/underscore'], function ($, moment, _) {
 	 * @return {String}
 	 */
 	function CheckmarkFormatter(row, cell, value, columnDef, dataContext) {
-		return value ? "<img src='"+app.config.media_base+"img/slickgrid/tick.png'>" : "";
+		return value ? "<img src='"+window.pass.url.media+"img/slickgrid/tick.png'>" : "";
 	}
 
 	/**
 	 * @return {String}
 	 */
 	function xvIcon(row, cell, value, columnDef, dataContext) {
-		return value == '1' ? '<span class="xv-icon v-icon">1</span>' : '<span class="xv-icon x-icon">0</span>';
+		var icon = value == '1' ? 'v' : 'x';
+		return '<div class="text-center"><span class="icon-'+icon+'">'+value+'</span></div>';
 	}
 
 	/**
@@ -92,7 +93,7 @@ define(['jquery', 'moment', 'utils/underscore'], function ($, moment, _) {
 	 */
 	function DateFormatter(row, cell, value, columnDef, dataContext) {
 		var parse = columnDef.parse || '@',
-			format = columnDef.format || app.config.datetimeFormat;
+			format = columnDef.format || window.pass.dates.datetimeFormat;
 
 		if (columnDef.timezone_offset)
 		{
@@ -170,7 +171,7 @@ define(['jquery', 'moment', 'utils/underscore'], function ($, moment, _) {
 	 * @return {String}
 	 */
 	function FavoriteFormatter(row, cell, value, columnDef, dataContext) {
-		var href = app.config.base+columnDef.href+'/'+dataContext.id,
+		var href = window.pass.url.base+columnDef.href+'/'+dataContext.id,
 			title = value == '1' ? 'Unset Favorite' : 'Set as Favorite';
 
 		return '<div class="btn-group"><a href="'+href+'" class="info icon favorite state-'+value+'" title="'+title+'"></a></div>';
