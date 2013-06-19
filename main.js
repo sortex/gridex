@@ -127,9 +127,12 @@ define([
 				$this.after($('<div class="slick-pager" />').append(data.status));
 			}
 
-			$(window).resize(function () {
+			// Use underscore's debounce to postpone event execution
+			// until after wait milliseconds have elapsed since the
+			// last time it was invoked.
+			$(window).bind('resize.datagrid', _.debounce(function() {
 				data.grid.resizeCanvas();
-			});
+			}, 500));
 
 			if (settings.controls) {
 				$controls = $('<div />').addClass('grid-controls')
