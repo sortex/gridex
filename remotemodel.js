@@ -201,8 +201,8 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 			return request_type || 'GET';
 		}
 
-		function bindForm(selector) {
-			$formFilter = $(selector);
+		function bindForm($form) {
+			$formFilter = $form;
 			$formFilter.bind('submit.remotemodel', function () {
 				clear();
 				ensureData(0, 0);
