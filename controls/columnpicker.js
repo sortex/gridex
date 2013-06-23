@@ -5,7 +5,7 @@ define(['jquery', 'jquery.cookie'], function ($) {
 		var columnCheckboxes;
 		var the_columns = $.extend([], columns);
 		var total_visible_columns = 0;
-		var uniqueId = identifier || App.route.route+'/'+App.route.controller+'/'+App.route.action;
+		var uniqueId = identifier || window.location.pathname+window.location.hash;
 		var saved_state = $.cookie(uniqueId);
 
 		var defaults = {
@@ -59,7 +59,7 @@ define(['jquery', 'jquery.cookie'], function ($) {
 				return false;
 			}).appendTo($menu);
 
-			$('<h2 />').html('Customized Columns').appendTo($menu);
+			$('<h2 />').html('Columns').appendTo($menu);
 
 			$ul = $('<ul />');
 			$ul.appendTo($menu);
@@ -112,8 +112,13 @@ define(['jquery', 'jquery.cookie'], function ($) {
 				viewportWidth = $(window).width(),
 				viewportHeight = $(window).height() + $(window).scrollTop(),
 				padding = 10,
-				x = (e.type == 'click' ? e.target.offsetLeft + e.target.offsetWidth : e.pageX),
-				y = (e.type == 'click' ? e.target.offsetTop + e.target.offsetHeight : e.pageY) + padding;
+				x = e.pageX,
+				y = e.pageY;
+
+			if (e.type == 'click') {
+				x += e.target.offsetLeft + e.target.offsetWidth;
+				y += e.target.offsetTop + e.target.offsetHeight;
+			}
 
 			if (x + actualWidth > viewportWidth) {
 				x = viewportWidth - actualWidth - padding;
