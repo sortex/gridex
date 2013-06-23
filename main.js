@@ -15,7 +15,7 @@ define([
 	'./controls/columnpicker',
 	'jqueryui',
 	'jquery.pagination'
-	], function ($, SlickGrid, AutoTooltips, ButtonsColumn, SlickColumnPicker) {
+], function ($, SlickGrid, AutoTooltips, ButtonsColumn, SlickColumnPicker) {
 
 	// Default datagrid plugin configuration
 	var default_settings = {
@@ -33,7 +33,7 @@ define([
 		pageSize: 15,
 
 		// Slickgrid options:
-		rowHeight: 31,
+		rowHeight: 25,
 		defaultColumnWidth: 80,
 		enableTextSelectionOnCells: true,
 		enableCellNavigation: false,
@@ -60,6 +60,8 @@ define([
 
 				// Merge default settings
 				options = $.extend({}, default_settings, options);
+				options.columns = $.extend([], options.columns);
+				options.buttons = $.extend([], options.buttons);
 
 				if (options.disableScrollbar) {
 					options.leaveSpaceForNewRows = true;
@@ -165,7 +167,7 @@ define([
 				endpoint += 'format=csv&limit=4000';
 				endpoint += '&columns='+encodeURIComponent(JSON.stringify(columns));
 				if (title) {
-					endpoint += '&title='+encodeURIComponent(title.toLowerCase().replace(/[^a-z0-9_\-\(\)]/g, '_'));
+					endpoint += '&fn='+encodeURIComponent(title.toLowerCase().replace(/[^a-z0-9_\-\(\)]/g, '_'));
 				}
 
 				var buttons_template = '<div class="btn-group">';
@@ -574,6 +576,9 @@ define([
 					// Removing controls
 					data.pager && data.pager.remove();
 					data.pager = null;
+
+					data.indicate && data.indicate.remove();
+					data.indicate = null;
 
 					if (data.settings.controls) {
 						$this.prev('.grid-controls').remove();

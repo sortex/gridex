@@ -4,7 +4,7 @@
  * @namespace Slick
  */
 
-define(['jquery', 'moment', 'utils/underscore'], function ($, moment, _) {
+define(['jquery', 'moment', 'underscore'], function ($, moment, _) {
 
 	/**
 	 * @return {String}

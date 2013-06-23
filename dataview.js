@@ -817,8 +817,8 @@ define(['jquery', 'slickgrid/slick.core', './groupitemmetadataprovider'], functi
 			return request_type || 'POST';
 		}
 
-		function bindForm(selector) {
-			$formFilter = $(selector);
+		function bindForm($form) {
+			$formFilter = $form;
 			$formFilter.bind('submit.dataview', function () { requery(); return false });
 		}
 
