@@ -405,8 +405,8 @@ define([
 					$vp.scrollTop(scrollTop);
 					return false;
 				},
-				prev_text: '<span></span>',
-				next_text: '<span></span>',
+				prev_text: '<span>&laquo;</span>',
+				next_text: '<span>&raquo;</span>',
 				prev_show_always: true,
 				next_show_always: true
 			});
