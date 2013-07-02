@@ -107,7 +107,6 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 				onDataLoading.notify({from: from, to: to});
 
 				req = $.ajax({
-					cache: false,
 					url: endpoint,
 					data: the_post_data,
 					dataType: 'json',
@@ -220,9 +219,6 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 		function parseFilters() {
 			var filter_regex = /^bind\((.*)\)$/,
 				filter, matches, selector, val, timestamp, $inp, type;
-
-			// Check filter form bind
-			if ( ! $formFilter || ! $formFilter.length) return filters;
 
 			// Empty filters
 			parsedFilters = {};
