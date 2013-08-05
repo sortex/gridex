@@ -263,6 +263,29 @@ define([
 				$this.before($filters);
 			}
 
+			/**
+			 * Resize canvas height according to actual data rows (to prevent blank space)
+			 *
+			 * @param $grid
+			 * @param dataLength
+			 * @returns {number} - new height in pixels
+			 */
+			function resizeCanvasHeight($grid, dataLength) {
+				var pageRows   = dataLength <= data.settings.pageSize ? dataLength : data.settings.pageSize,
+					newHeight  = pageRows*data.settings.rowHeight;
+
+				$grid // grid-canvas
+					.css('height', newHeight+'px');
+				$grid.parent() // slick-viewport
+					.css('height', newHeight+'px');
+				$grid.parents('.datagrid:first') // datagrid container
+					.css('height', 'auto');
+
+				data.grid.resizeCanvas();
+
+				return newHeight;
+			}
+
 			if (settings.model.isRemote) {
 
 				settings.model.onDataLoading.subscribe(function () {
@@ -285,13 +308,19 @@ define([
 					for (var i = args.from; i <= args.to; i ++) {
 						data.grid.invalidateRow(i);
 					}
+
+					var $grid = $(data.grid.getCanvasNode());
+
+					// Resize canvas height according to actual data rows
+					resizeCanvasHeight($grid, dataLength);
+
 					data.grid.updateRowCount();
 					data.grid.render();
 
 					if ( ! data.pager || data.pager.data('total_items') != dataLength) {
 //						log('** Total items changed!');
 						// Scroll to top, for page 1
-						$(data.grid.getCanvasNode()).parent().scrollTop(0);
+						$grid.parent().scrollTop(0);
 						// Re-setup pagination
 						methods.setup_pagination(data, data.pager ? data.pager.data('page_size') : data.settings.pageSize, dataLength);
 					}
@@ -332,17 +361,29 @@ define([
 					data.grid.render();
 				});
 
+				settings.model.onLoaded.subscribe(function () {
+					var dataLength = data.grid.getDataLength(),
+						$grid      = $(data.grid.getCanvasNode());
+
+					// Resize canvas height according to actual data rows
+					resizeCanvasHeight($grid, dataLength);
+				});
+
 				settings.model.onRowsChanged.subscribe(function (e, args) {
 //					log('DataView.onRowsChanged: datagrid', settings);
 					data.grid.invalidateRows(args.rows);
 					data.grid.render();
 
-					var dataLength = data.grid.getDataLength();
+					var dataLength = data.grid.getDataLength(),
+						$grid      = $(data.grid.getCanvasNode());
+
+					// Resize canvas height according to actual data rows
+					resizeCanvasHeight($grid, dataLength);
 
 					if ( ! data.pager || data.pager.data('total_items') != dataLength) {
 //						log('** Total items changed!');
 						// Scroll to top, for page 1
-						$(data.grid.getCanvasNode()).parent().scrollTop(0);
+						$grid.parent().scrollTop(0);
 						// Re-setup pagination
 						methods.setup_pagination(data, data.pager ? data.pager.data('page_size') : data.settings.pageSize, dataLength);
 					}

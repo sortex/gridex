@@ -34,7 +34,7 @@ classes should alter those!
 
 div.datagrid {
   background: #fff; outline: 0;
-  height: 541px; margin: 0; clear: both;
+  min-height: 150px; height: 541px; margin: 0; clear: both;
   @include border-radius(6px);
   border-right: 1px solid $tableBorderSides;
   border-bottom: 1px solid $tableBorderBottom;
@@ -81,7 +81,7 @@ div.datagrid {
   // No results message
   h2.no-data {
     color: #858585; border: 0; background: 0;
-    margin: 220px 0 0;
+    margin: 48px 0 0;
     width: 100%; text-align: center;
     line-height: 18px; font-size: 18px;
   }
