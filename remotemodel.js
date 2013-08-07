@@ -169,8 +169,12 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 		}
 
 		function reloadData(from, to) {
-			for (var i = from; i <= to; i ++) {
-				delete data[i];
+			if ( ! from && ! to) {
+				clear();
+			} else {
+				for (var i = from; i <= to; i ++) {
+					delete data[i];
+				}
 			}
 
 			ensureData(from, to);
