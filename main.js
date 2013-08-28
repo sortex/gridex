@@ -304,6 +304,8 @@ define([
 
 				settings.model.onDataLoaded.subscribe(function (e, args) {
 //					log('RemoteModel.onDataLoaded');
+					if ( ! data.grid) return;
+
 					var dataLength = data.grid.getDataLength();
 					for (var i = args.from; i <= args.to; i ++) {
 						data.grid.invalidateRow(i);
