@@ -31,6 +31,12 @@ define([
 		enableColumnPicker: true,
 		enableTotals: false,
 		pageSize: 15,
+		iconClass: 'glyphicon',
+		texts: {
+			export: 'Export',
+			columns: 'Columns',
+			filters: 'Filters'
+		},
 
 		// Slickgrid options:
 		rowHeight: 25,
@@ -173,17 +179,17 @@ define([
 				var buttons_template = '<div class="btn-group">';
 
 				// Add export button
-				buttons_template += '<span><a href="#" class="info grid-icon export" data-placement="left" title="Export to CSV">Export</a></span>';
+				buttons_template += '<span><a href="#" class="info grid-icon export" data-placement="left" title="Export to CSV">'+(settings.texts.export || '')+'</a></span>';
 
 				// Add column-picker button (only if more than 2 columns)
 				if (settings.enableColumnPicker && columns.length > 2) {
-					buttons_template += '<span><a href="#" class="info grid-icon columns" data-placement="left" title="Customize Columns">Columns</a></span>';
+					buttons_template += '<span><a href="#" class="info grid-icon columns" data-placement="left" title="Customize Columns">'+(settings.texts.columns || '')+'</a></span>';
 				}
 
 				// Add filters toggle button (only if form.filter exists)
 				var $filters = $('form.filter');
 				if ($filters.length) {
-					buttons_template += '<span><a href="#" class="info grid-icon filters" data-placement="left" title="Toggle Filters">Filters</a></span>';
+					buttons_template += '<span><a href="#" class="info grid-icon filters" data-placement="left" title="Toggle Filters">'+(settings.texts.filters || '')+'</a></span>';
 				}
 
 				buttons_template += '</div>';
@@ -517,6 +523,7 @@ define([
 
 			if (settings.buttons.length) {
 				var buttonsPlugin = new ButtonsColumn({
+					iconClass: settings.iconClass,
 					buttons: settings.buttons,
 					buttonsFormatter: settings.buttonsFormatter
 				});

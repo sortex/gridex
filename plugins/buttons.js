@@ -20,7 +20,7 @@ define(['jquery'], function ($) {
 
 		var _buttons = '';
 		$.each(_options.buttons, function (i, button) {
-			_buttons += '<span><a href="#" class="info '+(button.title ? '' : 'icon')+' '+button['class']+'" rel="'+(button.rel || button['class'])+'" '+(button.label ? 'title="'+button.label+'"' : '')+' data-index="'+i+'">'+(button.title ? button.title : '&nbsp;')+'</a></span>';
+			_buttons += '<span><a href="#" class="info '+(button.title ? '' : options.iconClass)+' '+button['class']+'" rel="'+(button.rel || button['class'])+'" '+(button.label ? 'title="'+button.label+'"' : '')+' data-index="'+i+'">'+(button.title ? button.title : '&nbsp;')+'</a></span>';
 		});
 
 		var _ctrls = $('<div />').append(_buttons);
@@ -34,7 +34,7 @@ define(['jquery'], function ($) {
 				_grid.onMouseLeave.subscribe(handleLeave);
 
 			} else {
-				$canvas.on('click', 'a.icon', function () {
+				$canvas.on('click', 'a.'+options.iconClass, function () {
 					var $btn     = $(this),
 						btn_def  = _options.buttons[$btn.data('index')],
 						id       = $btn.parent().parent().data('pk'),
@@ -55,7 +55,7 @@ define(['jquery'], function ($) {
 				_grid.onMouseEnter.unsubscribe(handleEnter);
 				_grid.onMouseLeave.unsubscribe(handleLeave);
 			} else {
-				$(_grid.getCanvasNode()).off('click', 'a.icon').tooltip('hide');
+				$(_grid.getCanvasNode()).off('click', 'a.'+options.iconClass).tooltip('hide');
 			}
 		}
 
@@ -182,7 +182,7 @@ define(['jquery'], function ($) {
 				}
 				return '<div class="btn-group" data-pk="'+dataContext[_options.primaryKey]+'">'+html+'</div>';
 			} else {
-				return '<div class="btn-group"><a href="javascript:void(0)" class="handler on icon expand" data-row="'+row+'" data-pk="'+dataContext[_options.primaryKey]+'"></a></div>';
+				return '<div class="btn-group"><a href="javascript:void(0)" class="handler on '+options.iconClass+' expand" data-row="'+row+'" data-pk="'+dataContext[_options.primaryKey]+'"></a></div>';
 			}
 		}
 
