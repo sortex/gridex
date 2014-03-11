@@ -175,8 +175,8 @@ define([
 
 				// Collect CSV columns
 				$.each(csvVirtualColumns, function(i, column) {
-					endpoint += '&virtual_fields[]='+column.field;
-					columns.push({ fld: column.field, name: column.name, type: column.type || '' });
+					endpoint += '&virtual_fields[]='+column.id;
+					columns.push({ fld: column.id, name: column.name, type: column.type || '' });
 				});
 
 				// Add list of columns
