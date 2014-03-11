@@ -201,8 +201,8 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 			csvVirtualColumns = csvVirtualColumns;
 		}
 
-		function getCsvVirtualColumns(csvVirtualColumns) {
-			csvVirtualColumns = csvVirtualColumns;
+		function getCsvVirtualColumns() {
+			return csvVirtualColumns;
 		}
 
 		function getUrl() {
