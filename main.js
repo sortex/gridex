@@ -150,7 +150,8 @@ define([
 					columns  = [],
 					endpoint = settings.model.getUrl(),
 					$slct    = $controls.find('select'),
-					pageSize = settings.pageSize;
+					pageSize = settings.pageSize,
+					csvVirtualColumns = settings.model.getCsvVirtualColumns();
 
 				$.each([ pageSize, Math.ceil(pageSize*1.66), Math.ceil(pageSize*3.33), Math.ceil(pageSize*6.66), pageSize*10 ], function (i, val) {
 					$slct.append('<option>'+val+'</option>');
@@ -168,9 +169,17 @@ define([
 						columns.push({ fld: column.field, name: column.name, type: column.type || '' });
 					}
 				});
-				// Add list of columns
+
 				endpoint += endpoint.match(/\?/) ? '&' : '?';
 				endpoint += 'format=csv&limit=4000';
+
+				// Collect CSV columns
+				$.each(csvVirtualColumns, function(i, column) {
+					endpoint += '&virtual_fields[]='+column.field;
+					columns.push({ fld: column.field, name: column.name, type: column.type || '' });
+				});
+
+				// Add list of columns
 				endpoint += '&columns='+encodeURIComponent(JSON.stringify(columns));
 				if (title) {
 					endpoint += '&fn='+encodeURIComponent(title.toLowerCase().replace(/[^a-z0-9_\-\(\)]/g, '_'));

@@ -24,6 +24,7 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 		var $formFilter;
 		var filters = [];
 		var parsedFilters;
+		var csvVirtualColumns = [];
 
 		function init() {
 		}
@@ -196,6 +197,14 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 			request_type = a_request_type || 'GET';
 		}
 
+		function setCsvVirtualColumns(csvVirtualColumns) {
+			csvVirtualColumns = csvVirtualColumns;
+		}
+
+		function getCsvVirtualColumns(csvVirtualColumns) {
+			csvVirtualColumns = csvVirtualColumns;
+		}
+
 		function getUrl() {
 			return url;
 		}
@@ -275,6 +284,8 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 			"setSort": setSort,
 			"setUrl": setUrl,
 			"getUrl": getUrl,
+			"setCsvVirtualColumns": setCsvVirtualColumns,
+			"getCsvVirtualColumns": getCsvVirtualColumns,
 			"getRequestType": getRequestType,
 			"getRequestQuery": getRequestQuery,
 			"setFilters": setFilters,
