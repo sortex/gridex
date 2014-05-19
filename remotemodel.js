@@ -170,6 +170,10 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 		}
 
 		function reloadData(from, to) {
+
+			// Remove remaining tooltip elements from screen.
+			$('.tooltip').remove();
+
 			if ( ! from && ! to) {
 				clear();
 			} else {
