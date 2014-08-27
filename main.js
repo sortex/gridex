@@ -321,7 +321,7 @@ define([
 //					log('RemoteModel.onDataLoaded');
 
 					if ( ! data.grid) {
-						data.indicate.remove();
+						data.indicate && data.indicate.remove();
 						return;
 					}
 
