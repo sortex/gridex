@@ -306,15 +306,14 @@ define([
 				settings.model.onDataLoading.subscribe(function () {
 //					log('RemoteModel.onDataLoading');
 					if ( ! data.indicate) {
-					data.indicate = $("<span class='loading-indicator'><label>Loading...</label></span>").appendTo(document.body);
-
-					data.indicate
-						.css("position", "absolute")
-						.css("top", $this.position().top + $this.height() / 2 - data.indicate.height() / 2)
-						.css("left", $this.position().left + $this.width() / 2 - data.indicate.width() / 2);
+						data.indicate = $("<span class='loading-indicator'><label>Loading...</label></span>").appendTo(document.body);
+						data.indicate.css("position", "absolute");
 					}
 
-					data.indicate.show();
+					data.indicate
+						.css("top", $this.offset().top + $this.height() / 2 - data.indicate.height() / 2)
+						.css("left", $this.offset().left + $this.width() / 2 - data.indicate.width() / 2)
+						.show();
 				});
 
 				settings.model.onDataLoaded.subscribe(function (e, args) {
