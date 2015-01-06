@@ -163,6 +163,13 @@ define(['jquery', 'moment', 'underscore'], function ($, moment, _) {
 	/**
 	 * @return {String}
 	 */
+	function NumberFormatter(row, cell, value, columnDef, dataContext) {
+		return parseFloat(value, 10).toFixed(columnDef.precision).replace(/\.?0+$/, "");
+	}
+
+	/**
+	 * @return {String}
+	 */
 	function FloorPercent(row, cell, value, columnDef, dataContext) {
 		return Math.floor(value)+'%';
 	}
@@ -202,6 +209,7 @@ define(['jquery', 'moment', 'underscore'], function ($, moment, _) {
 		"Email": EmailFormatter,
 		"Tooltip": TooltipFormatter,
 		"PercentFormatter": PercentFormatter,
+		"NumberFormatter": NumberFormatter,
 		"FloorPercent": FloorPercent,
 		"Favorite": FavoriteFormatter,
 		"GroupSumTotalsFormatter": GroupSumTotalsFormatter,
