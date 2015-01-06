@@ -21,7 +21,7 @@ define(['jquery', 'jquery.cookie'], function ($) {
 				= $('<span class="slick-columnpicker" style="display:none;position:absolute" />');
 
 			// Add the fake 'All' column
-			the_columns.unshift({ id: '_all', name: 'All' });
+			the_columns.unshift({ id: '_all', name: options.texts.all });
 
 			if (saved_state && saved_state.indexOf(',') > -1) {
 				var visible_ids = saved_state.split(',');
@@ -54,12 +54,12 @@ define(['jquery', 'jquery.cookie'], function ($) {
 
 			columnCheckboxes = [];
 
-			$('<a class="icon remove">close</a>').click(function () {
+			$('<a class="icon remove">'+options.texts.close+'</a>').click(function () {
 				$menu.fadeOut(options.fadeSpeed);
 				return false;
 			}).appendTo($menu);
 
-			$('<h2 />').html('Columns').appendTo($menu);
+			$('<h2 />').html(options.texts.columns_dialog_title).appendTo($menu);
 
 			$ul = $('<ul />');
 			$ul.appendTo($menu);
@@ -172,7 +172,7 @@ define(['jquery', 'jquery.cookie'], function ($) {
 				$.each(columnCheckboxes, function (i, e) {
 					// Dont make fake "All" column visible
 					if ($(this).data('column-id') != '_all'
-						// Always add internal columns (like _button_handler) or a selected column
+							// Always add internal columns (like _button_handler) or a selected column
 						&& (the_columns[i].id.charAt(0) == '_' || $(this).is(':checked'))
 					) {
 						visibleColumns.push(the_columns[i]);
@@ -185,10 +185,10 @@ define(['jquery', 'jquery.cookie'], function ($) {
 					columnCheckboxes[0].prop('checked', visibleColumns.length == total_visible_columns);
 				}
 
-//				if ( ! visibleColumns.length) {
-//					$target.prop('checked', true);
-//					return;
-//				}
+				//				if ( ! visibleColumns.length) {
+				//					$target.prop('checked', true);
+				//					return;
+				//				}
 
 				// Save column state in cookie
 				$.cookie(uniqueId, visibleIds, { expires: 730 });

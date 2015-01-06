@@ -32,11 +32,6 @@ define([
 		enableTotals: false,
 		pageSize: 15,
 		iconClass: 'glyphicon',
-		texts: {
-			export: 'Export',
-			columns: 'Columns',
-			filters: 'Filters'
-		},
 
 		// Slickgrid options:
 		rowHeight: 25,
@@ -49,6 +44,26 @@ define([
 		enableAddRow: false,
 		disableScrollbar: true
 	};
+
+	var default_texts = {
+		caption: null,
+		export: 'Export',
+		columns: 'Columns',
+		filters: 'Filters',
+		refresh: 'Refresh',
+		columns_dialog_title: 'Columns',
+		all: 'All',
+		close: 'close',
+		loading: 'Loading',
+		no_results_msg: 'No Results',
+		showing: 'Showing',
+		of: 'of',
+		rows: 'rows',
+		tooltip_items_per_page: 'Items Per Page',
+		tooltip_export: 'Export to CSV',
+		tooltip_columns: 'Customize Columns',
+		tooltip_filters: 'Toggle Filters'
+	}, default_texts_translated = false;
 
 	// ------------------------------------------------------- METHODS ---------------------------------------------------------
 
@@ -120,13 +135,36 @@ define([
 		setup: function (settings) {
 			var $this     = $(this),
 				data      = $this.data('datagrid'),
+				tooltips_direction = settings.is_rtl ? 'right' : 'left',
 				$caption,
 				$controls;
+
+			// Translating all texts
+			if (settings.polyglot) {
+				if ( ! default_texts_translated)
+				{
+					var text;
+					for (var txt in default_texts) {
+						text = settings.texts[txt] === undefined ? default_texts[txt] : settings.texts[txt];
+						console.log(txt, text);
+						default_texts[txt] = text ? settings.polyglot.t(text) : '';
+					}
+					default_texts_translated = true;
+				}
+
+				settings.texts = default_texts;
+
+				if (settings.caption)
+					settings.texts['caption'] = settings.polyglot.t(settings.caption);
+
+				if (settings.no_results_msg)
+					settings.texts['no_results_msg'] = settings.polyglot.t(settings.no_results_msg);
+			}
 
 			// Build caption div
 			if (settings.caption) {
 				$caption = $('<div />').addClass('grid-header')
-					.append($('<label />').text(settings.caption));
+					.append($('<label />').text(settings.texts.caption));
 				$this.before($caption);
 			}
 
@@ -144,7 +182,7 @@ define([
 
 			if (settings.controls) {
 				$controls = $('<div />').addClass('grid-controls')
-					.append('<select class="page_size info" data-placement="left" title="Items Per Page"></select>');
+					.append('<select class="page_size info" data-placement="'+tooltips_direction+'" title="'+(settings.texts.tooltip_items_per_page || '')+'"></select>');
 
 				var title    = $('h1:first').text(),
 					columns  = [],
@@ -159,7 +197,7 @@ define([
 
 				// Add groupped-by field
 				if (settings.model.getGroupGetter && settings.model.getGroupGetter()) {
-					columns.push({ fld: settings.model.getGroupGetter(), name: App.ucfirst(settings.model.getGroupGetter().replace(/_/g, ' ')), type: '' });
+					columns.push({ fld: settings.model.getGroupGetter(), name: settings.model.getGroupGetter().replace(/_/g, ' '), type: '' });
 				}
 
 				// Collect columns from settings
@@ -188,17 +226,17 @@ define([
 				var buttons_template = '<div class="btn-group">';
 
 				// Add export button
-				buttons_template += '<span><a href="#" class="info grid-icon export" data-placement="left" title="Export to CSV">'+(settings.texts.export || '')+'</a></span>';
+				buttons_template += '<span><a href="#" class="info grid-icon export" data-placement="'+tooltips_direction+'" title="'+(settings.texts.tooltip_export || '')+'">'+(settings.texts.export || '')+'</a></span>';
 
 				// Add column-picker button (only if more than 2 columns)
 				if (settings.enableColumnPicker && columns.length > 2) {
-					buttons_template += '<span><a href="#" class="info grid-icon columns" data-placement="left" title="Customize Columns">'+(settings.texts.columns || '')+'</a></span>';
+					buttons_template += '<span><a href="#" class="info grid-icon columns" data-placement="'+tooltips_direction+'" title="'+(settings.texts.tooltip_columns || '')+'">'+(settings.texts.columns || '')+'</a></span>';
 				}
 
 				// Add filters toggle button (only if form.filter exists)
 				var $filters = $('form.filter');
 				if ($filters.length) {
-					buttons_template += '<span><a href="#" class="info grid-icon filters" data-placement="left" title="Toggle Filters">'+(settings.texts.filters || '')+'</a></span>';
+					buttons_template += '<span><a href="#" class="info grid-icon filters" data-placement="'+tooltips_direction+'" title="'+(settings.texts.tooltip_filters || '')+'">'+(settings.texts.filters || '')+'</a></span>';
 				}
 
 				buttons_template += '</div>';
@@ -209,7 +247,7 @@ define([
 				$controls.find('a.export').attr('href', endpoint);
 
 				if (settings.enableRefresh) {
-					$controls.append('<button type="button" class="btn-grey refresh right">Refresh</button>');
+					$controls.append('<button type="button" class="btn-grey refresh right">'+settings.texts.refresh+'</button>');
 				}
 
 				$controls.find('select.page_size').bind('change.datagrid', function () {
@@ -304,9 +342,9 @@ define([
 			if (settings.model.isRemote) {
 
 				settings.model.onDataLoading.subscribe(function () {
-//					log('RemoteModel.onDataLoading');
+					//					log('RemoteModel.onDataLoading');
 					if ( ! data.indicate) {
-						data.indicate = $("<span class='loading-indicator'><label>Loading...</label></span>").appendTo(document.body);
+						data.indicate = $("<span class='loading-indicator'><label>"+settings.texts.loading+"...</label></span>").appendTo(document.body);
 						data.indicate.css("position", "absolute");
 					}
 
@@ -317,7 +355,7 @@ define([
 				});
 
 				settings.model.onDataLoaded.subscribe(function (e, args) {
-//					log('RemoteModel.onDataLoaded');
+					//					log('RemoteModel.onDataLoaded');
 
 					if ( ! data.grid) {
 						data.indicate && data.indicate.remove();
@@ -338,7 +376,7 @@ define([
 					data.grid.render();
 
 					if ( ! data.pager || data.pager.data('total_items') != dataLength) {
-//						log('** Total items changed!');
+						//						log('** Total items changed!');
 						// Scroll to top, for page 1
 						$grid.parent().scrollTop(0);
 						// Re-setup pagination
@@ -349,7 +387,7 @@ define([
 
 					// Create no-results message element
 					if ( ! data.no_results_msg) {
-						data.no_results_msg = $('<h2 class="no-data">'+(settings.no_results_msg ? settings.no_results_msg : 'No Results' )+'</h2>')
+						data.no_results_msg = $('<h2 class="no-data">'+settings.texts.no_results_msg+'</h2>')
 							.appendTo($this.find('.grid-canvas'));
 					}
 
@@ -359,24 +397,24 @@ define([
 
 			} else {
 				// Build pager div
-//				data.pager = $('<div />').attr('id', this.id+'-pager');
-//				$this.after(data.pager);
+				//				data.pager = $('<div />').attr('id', this.id+'-pager');
+				//				$this.after(data.pager);
 
 				if (settings.enableTotals) {
 					settings.showHeaderRow = true;
 				}
 
 				if ( ! settings.model) {
-// !!! TODO !!!
-//					settings.model = new Slick.Data.DataView();
+					// !!! TODO !!!
+					//					settings.model = new Slick.Data.DataView();
 				}
 
 				settings.model.onPagingInfoChanged.subscribe(function (e, args) {
-//					log('DataView.onPagingInfoChanged');
+					//					log('DataView.onPagingInfoChanged');
 				});
 
 				settings.model.onRowCountChanged.subscribe(function (e, args) {
-//					log('DataView.onRowCountChanged: datagrid', settings);
+					//					log('DataView.onRowCountChanged: datagrid', settings);
 					data.grid.updateRowCount();
 					data.grid.render();
 				});
@@ -390,7 +428,7 @@ define([
 				});
 
 				settings.model.onRowsChanged.subscribe(function (e, args) {
-//					log('DataView.onRowsChanged: datagrid', settings);
+					//					log('DataView.onRowsChanged: datagrid', settings);
 					data.grid.invalidateRows(args.rows);
 					data.grid.render();
 
@@ -401,7 +439,7 @@ define([
 					resizeCanvasHeight($grid, dataLength);
 
 					if ( ! data.pager || data.pager.data('total_items') != dataLength) {
-//						log('** Total items changed!');
+						//						log('** Total items changed!');
 						// Scroll to top, for page 1
 						$grid.parent().scrollTop(0);
 						// Re-setup pagination
@@ -410,7 +448,7 @@ define([
 				});
 
 				settings.model.onDataChanged.subscribe(function (e, args) {
-//					log('DataView.onDataChanged: datagrid');
+					//					log('DataView.onDataChanged: datagrid');
 					data.grid.invalidateAllRows();
 					data.grid.render();
 					if (settings.enableTotals) {
@@ -419,7 +457,7 @@ define([
 				});
 
 				settings.model.onEmptyResult.subscribe(function (e, args) {
-//					log('DataView.onEmptyResult: datagrid');
+					//					log('DataView.onEmptyResult: datagrid');
 					methods.setup_pagination(data, data.pager ? data.pager.data('page_size') : data.settings.pageSize, 0);
 				});
 			}
@@ -443,9 +481,10 @@ define([
 		setup_pagination: function (data, page_size, dataLength) {
 			var vp     = data.grid.getViewport(),
 				maxNumRows = vp.top + page_size,
-					status = dataLength > 0
-					? "Showing "+(vp.top+1)+"-"+ Math.min(maxNumRows, dataLength) +" of " + dataLength + " rows"
-					: 'No records';
+				texts = data.settings.texts,
+				status = dataLength > 0
+					? texts.showing+" "+(vp.top+1)+"-"+ Math.min(maxNumRows, dataLength) +" "+texts.of+" " + dataLength + " "+texts.rows
+					: '';
 
 			data.status && data.status.text(status);
 
@@ -483,8 +522,9 @@ define([
 				vp = viewport || data.grid.getViewport(),
 				dataLength = data.grid.getDataLength(),
 				maxNumRows = vp.top + page_size,
+				texts = data.settings.texts,
 				status = dataLength > 0
-					? "Showing "+(vp.top+1)+"-"+ Math.min(maxNumRows, dataLength) +" of " + dataLength + " rows"
+					? texts.showing+" "+(vp.top+1)+"-"+ Math.min(maxNumRows, dataLength) +" "+texts.of+" " + dataLength + " "+texts.rows
 					: '';
 
 			data.status && data.status.text(status);
@@ -530,6 +570,13 @@ define([
 			var sortdir;
 
 			if (settings.buttons.length) {
+
+				// Translate buttons labels
+				if (settings.polyglot)
+					for (var i in settings.buttons) {
+						settings.buttons[i].label = settings.polyglot.t(settings.buttons[i].label);
+					}
+
 				var buttonsPlugin = new ButtonsColumn({
 					iconClass: settings.iconClass,
 					buttons: settings.buttons,
@@ -538,6 +585,15 @@ define([
 
 				settings.columns.push(buttonsPlugin.getColumnDefinition());
 			}
+
+			if (settings.is_rtl)
+				settings.columns = settings.columns.reverse();
+
+			// Translate column titles
+			if (settings.polyglot)
+				for (var i in settings.columns) {
+					settings.columns[i].name = settings.polyglot.t(settings.columns[i].name);
+				}
 
 			if (model.isRemote) {
 				data.grid = new SlickGrid('#'+this.id, model.data, settings.columns, settings);
@@ -558,10 +614,10 @@ define([
 				data.grid.onViewportChanged.notify();
 
 			} else {
-//				dataView.setPagingOptions({ pageSize: 10 });
+				//				dataView.setPagingOptions({ pageSize: 10 });
 
 				data.grid = new SlickGrid('#'+this.id, model, settings.columns, settings);
-//				pager = new Slick.Controls.Pager(model, data.grid, data.pager);
+				//				pager = new Slick.Controls.Pager(model, data.grid, data.pager);
 
 				data.grid.onViewportChanged.subscribe(function (e, args) {
 					methods.update_pagination(data);
@@ -575,12 +631,12 @@ define([
 
 				function comparer(a, b) {
 					var x = a[sortCol.field], y = b[sortCol.field];
-//					log('comparer', sortCol, sortCol.type);
+					//					log('comparer', sortCol, sortCol.type);
 					if ( ! sortCol.type || sortCol.type == 'int') {
 						x = parseInt(x);
 						y = parseInt(y);
 					}
-//					log(x, y, (x == y ? 0 : (x > y ? 1 : - 1)));
+					//					log(x, y, (x == y ? 0 : (x > y ? 1 : - 1)));
 					return (x == y ? 0 : (x > y ? 1 : - 1));
 				}
 
