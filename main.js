@@ -146,7 +146,6 @@ define([
 					var text;
 					for (var txt in default_texts) {
 						text = settings.texts[txt] === undefined ? default_texts[txt] : settings.texts[txt];
-						console.log(txt, text);
 						default_texts[txt] = text ? settings.polyglot.t(text) : '';
 					}
 					default_texts_translated = true;
