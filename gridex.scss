@@ -73,6 +73,11 @@ div.datagrid {
       &:hover {  background-color: #F2BC46 }
     }
 
+    .slick-header-column-filtered {
+      background-color: #ff9550; color: #fff; cursor: pointer;
+      &:hover { background-color: #d77a46; color: #fff !important; }
+    }
+
     .slick-sort-indicator { margin-left: 0; }
     .slick-sort-indicator-desc { @extend .icon.sort-desc; }
     .slick-sort-indicator-asc { @extend .icon.sort-asc; }

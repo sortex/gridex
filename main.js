@@ -732,6 +732,58 @@ define([
 			var $this     = $(this),
 				data      = $this.data('chart');
 
+		},
+
+		/**
+		 * Flag filtered columns
+		 * - Finding filtered columns of $form
+		 * - Adding 'slick-header-column-filtered' class to datagrid columns
+		 *
+		 * @param settings
+		 * - filter_form          - filter form
+		 * - filters_columns_map  - filter to column map names (e.g. schedule_date_from (input) -> schedule_date (column))
+		 */
+		flag_filtered_columns: function (settings) {
+
+			if ( ! settings.filter_form || ! settings.filters_columns_map) { return false; }
+
+			var $filter_elements = settings.filter_form.find('input:text, input:checked, select').filter(function() {
+					// Get only inputs with real value (not placeholder value)
+					return this.value && this.value != $(this).attr('placeholder')
+				}),
+				$grid_columns = $(this).find('.slick-header-column'),
+				filtered_columns = {},
+				_filtered_column;
+
+			// Prepare filtered columns names array
+			if ($filter_elements) {
+				$.each($filter_elements, function() {
+					_filtered_column = settings.filters_columns_map[$(this).attr('name')];
+					if (_filtered_column) {
+						if ($.isArray(_filtered_column)) {
+							// Sometimes input filters more then 1 columns (e.g. name -> name, description) - flag all used columns
+							$.each(_filtered_column, function(i, single_column) {
+								filtered_columns[single_column] = true;
+							});
+						}
+						else {
+							filtered_columns[_filtered_column] = true;
+						}
+					}
+				});
+			}
+
+			// Clear filtered class for all columns
+			$grid_columns.removeClass('slick-header-column-filtered');
+
+			// add filtered class for filtered columns
+			if (filtered_columns) {
+				$grid_columns
+					.filter(function() {
+						return filtered_columns[$(this).data('column').id];
+					})
+					.addClass('slick-header-column-filtered');
+			}
 		}
 
 	};

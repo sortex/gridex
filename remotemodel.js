@@ -196,6 +196,10 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 			clear();
 		}
 
+		function getFilters() {
+			return filters;
+		}
+
 		function setUrl(a_url, a_request_type) {
 			url = a_url;
 			request_type = a_request_type || 'GET';
@@ -293,6 +297,7 @@ define(['jquery', 'slickgrid/slick.core'], function ($, Slick) {
 			"getRequestType": getRequestType,
 			"getRequestQuery": getRequestQuery,
 			"setFilters": setFilters,
+			"getFilters": getFilters,
 
 			// events
 			"onDataLoading": onDataLoading,
