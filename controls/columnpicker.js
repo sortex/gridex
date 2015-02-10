@@ -14,6 +14,8 @@ define(['jquery', 'jquery.cookie'], function ($) {
 		};
 
 		function init() {
+			var visibleColumns = [];
+
 			grid.onHeaderContextMenu.subscribe(handleHeaderContextMenu);
 			options = $.extend({}, defaults, options);
 
@@ -23,17 +25,40 @@ define(['jquery', 'jquery.cookie'], function ($) {
 			// Add the fake 'All' column
 			the_columns.unshift({ id: '_all', name: options.texts.all });
 
+			// Load visible columns from Cookie
 			if (saved_state && saved_state.indexOf(',') > -1) {
 				var visible_ids = saved_state.split(',');
-				var visibleColumns = [];
 				// Skip "All" fake column (for starts from 1)
 				for (var i = 1; i < the_columns.length; i ++) {
 					// Always add internal columns (like _button_handler) or a selected column
 					if (the_columns[i].id.charAt(0) == '_' || jQuery.inArray(the_columns[i].id, visible_ids) > -1) {
 						visibleColumns.push(the_columns[i]);
 					}
+					//					// Hide column from columnpicker
+					//					// TODO.yakir (TBD Rafi) - Think of a proper way to remove from the columnpicker
+					//					// this code messed up the grid table columns
+					//					if (the_columns[i].hideFromColumnPicker) { the_columns.splice(i, 1); }
 				}
 				grid.setColumns(visibleColumns);
+			}
+			else
+			{
+				// Check if there's specific hidden columns
+				var has_hidden_columns = false;
+				for (var z = 1; z < the_columns.length; z ++) {
+					has_hidden_columns = has_hidden_columns || the_columns[z].hide;
+					if ( ! the_columns[z].hide && the_columns[z].id !== '_all') {
+						visibleColumns.push(the_columns[z]);
+					}
+					//					// Hide column from columnpicker
+					//					// TODO.yakir (TBD Rafi) - Think of a proper way to remove from the columnpicker
+					//					// this code messed up the grid table columns
+					//					if (the_columns[z].hideFromColumnPicker) { the_columns.splice(z, 1); }
+				}
+				// Only re-set columns if the 'hide' attribute was found
+				if (has_hidden_columns) {
+					grid.setColumns(visibleColumns);
+				}
 			}
 		}
 
