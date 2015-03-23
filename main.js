@@ -180,8 +180,13 @@ define([
 			}, 500));
 
 			if (settings.controls) {
+				settings.$pageSize = $('<select class="page_size info" data-placement="'+tooltips_direction+'" title="'+(settings.texts.tooltip_items_per_page || '')+'"></select>').hide();
 				$controls = $('<div />').addClass('grid-controls')
-					.append('<select class="page_size info" data-placement="'+tooltips_direction+'" title="'+(settings.texts.tooltip_items_per_page || '')+'"></select>');
+					.append(settings.$pageSize);
+
+				if (settings.title && settings.title.length) {
+					$('<h4 />').text(settings.title).prependTo($controls);
+				}
 
 				var title    = $('h1:first').text(),
 					columns  = [],
@@ -365,6 +370,9 @@ define([
 					for (var i = args.from; i <= args.to; i ++) {
 						data.grid.invalidateRow(i);
 					}
+
+					// Hide page size selector in case the minimum optional size is bigger than the results
+					data.settings.$pageSize[ dataLength > data.settings.$pageSize.find('option').first().val() ? 'show' : 'hide' ]();
 
 					var $grid = $(data.grid.getCanvasNode());
 
