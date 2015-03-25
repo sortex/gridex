@@ -372,7 +372,8 @@ define([
 					}
 
 					// Hide page size selector in case the minimum optional size is bigger than the results
-					data.settings.$pageSize[ dataLength > data.settings.$pageSize.find('option').first().val() ? 'show' : 'hide' ]();
+					data.settings.controls &&
+						data.settings.$pageSize[ dataLength > data.settings.$pageSize.find('option').first().val() ? 'show' : 'hide' ]();
 
 					var $grid = $(data.grid.getCanvasNode());
 
