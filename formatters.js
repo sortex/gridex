@@ -108,6 +108,25 @@ define(['jquery', 'moment', 'underscore'], function ($, moment, _) {
 		return value ? moment.utc(value).format(format) : '--';
 	}
 
+	/**
+	 * @return {String}
+	 */
+	function TimeAgoFormatter(row, cell, value, columnDef, dataContext) {
+		var parse = columnDef.parse || '@';
+
+		if (columnDef.timezone_offset)
+		{
+			value = parseInt(value, 0) + parseInt(columnDef.timezone_offset, 0);
+		}
+
+		// Unix time is stored in seconds while Javascript uses milliseconds
+		if (parse == '@' && value) {
+			value *= 1000;
+		}
+
+		return value ? moment.utc(value).fromNow() : '--';
+	}
+
 	// Defining dividends / devisors for percent formatter
 	// Example: { sent = 100, success = 55 -> percent = success/sent*100 = 55(%) }
 	var dividends_devisors = {
@@ -206,6 +225,7 @@ define(['jquery', 'moment', 'underscore'], function ($, moment, _) {
 		"Checkmark": CheckmarkFormatter,
 		"xvIcon": xvIcon,
 		"Date": DateFormatter,
+		"TimeAgo": TimeAgoFormatter,
 		"Email": EmailFormatter,
 		"Tooltip": TooltipFormatter,
 		"PercentFormatter": PercentFormatter,
