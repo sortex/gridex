@@ -30,11 +30,11 @@ define(['jquery'], function ($) {
         if ($node.innerWidth() < node.scrollWidth || $node.text().indexOf('\n') >= 0) {
 
           // Check for '.title' element's first link text
-          var text = $.trim($node.find('.title').length
-            // Use it as text if exists
-              ? $node.find('.title a:first').text()
-            // Otherwise use all cell's text
-              : $node.text());
+          var text = $.trim($node.filter('.row-title').length
+              // Use it as text if exists
+              ? $node.filter('.row-title').find('a:first').text()
+              // Otherwise use all cell's text
+              : ($node.hasClass('tooltip-with-html') ? $node.html() : $node.text()));
 
           if (options.maxToolTipLength && text.length > options.maxToolTipLength) {
             text = text.substr(0, options.maxToolTipLength - 3) + "...";
