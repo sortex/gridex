@@ -23,16 +23,29 @@ define(['jquery'], function ($) {
       $('.ui-tooltip').remove();
       var cell = _grid.getCellFromEvent(e);
       if (cell) {
-        var node = _grid.getCellNode(cell.row, cell.cell);
-        if ($(node).innerWidth() < node.scrollWidth) {
+        var node  = _grid.getCellNode(cell.row, cell.cell),
+            $node = $(node);
 
-          var text = $.trim( $(node).find('.title').length ? $(node).find('.title a:first').text() : $(node).text() );
+        // In case cell's text width is wider than the column, OR cell's text includes a break
+        if ($node.innerWidth() < node.scrollWidth || $node.text().indexOf('\n') >= 0) {
+
+          // Check for '.title' element's first link text
+          var text = $.trim($node.find('.title').length
+            // Use it as text if exists
+              ? $node.find('.title a:first').text()
+            // Otherwise use all cell's text
+              : $node.text());
+
           if (options.maxToolTipLength && text.length > options.maxToolTipLength) {
             text = text.substr(0, options.maxToolTipLength - 3) + "...";
           }
-          $(node).attr("title", text).addClass('info');
+
+          // Replace '\n' to '<br />' in tool tip
+          text = text.replace(/\n/g,'<br />');
+
+          $(node).attr("data-title", text).addClass('info');
         } else {
-          $(node).attr("title", "");
+          $(node).attr("data-title", "");
         }
       }
     }
