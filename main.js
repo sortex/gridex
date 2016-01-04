@@ -224,7 +224,7 @@ define([
 				// Add list of columns
 				endpoint += '&columns='+encodeURIComponent(JSON.stringify(columns));
 				if (title) {
-					endpoint += '&fn='+encodeURIComponent(title.toLowerCase().replace(/[^a-z0-9_\-\(\)]/g, '_'));
+					endpoint += '&fn='+encodeURIComponent(title.toLowerCase().replace(/[^a-z0-9א-ת_\-\(\)]/g, '_'));
 				}
 
 				var buttons_template = '<div class="btn-group">';
