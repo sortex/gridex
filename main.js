@@ -491,7 +491,10 @@ define([
 				maxNumRows = vp.top + page_size,
 				texts = data.settings.texts,
 				status = dataLength > 0
-					? texts.showing+" "+(vp.top+1)+"-"+ Math.min(maxNumRows, dataLength) +" "+texts.of+" " + dataLength + " "+texts.rows
+					? texts.showing+' '+(dataLength > maxNumRows
+							? (vp.top+1)+'-'+Math.min(maxNumRows, dataLength)+' '+texts.of+' '
+							: ''
+						)+dataLength+' '+texts.rows
 					: '';
 
 			data.status && data.status.text(status);
