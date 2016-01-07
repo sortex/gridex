@@ -329,7 +329,7 @@ define([
 			 */
 			function resizeCanvasHeight($grid, dataLength) {
 				var pageRows   = dataLength <= data.settings.pageSize ? dataLength : data.settings.pageSize,
-					newHeight  = pageRows*data.settings.rowHeight;
+					newHeight  = (pageRows*data.settings.rowHeight) || '50';
 
 				$grid // grid-canvas
 					.css('height', newHeight+'px');
@@ -490,7 +490,7 @@ define([
 			var vp     = data.grid.getViewport(),
 				maxNumRows = vp.top + page_size,
 				texts = data.settings.texts,
-				status = dataLength > 0
+				status = dataLength > 3
 					? texts.showing+' '+(dataLength > maxNumRows
 							? (vp.top+1)+'-'+Math.min(maxNumRows, dataLength)+' '+texts.of+' '
 							: ''
