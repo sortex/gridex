@@ -301,6 +301,28 @@ define([
 						}
 						url += '&'+decodeURIComponent($.param(query));
 					}
+
+					if (settings.grid_sort_uid) {
+
+						// Get last sorting, but don't crash if invalid
+						try {
+							var storedSorting = localStorage[settings.grid_sort_uid];
+
+							if (storedSorting) {
+								var saved_sorting = JSON.parse(storedSorting);
+
+								if (saved_sorting.sortCol) {
+									url += '&sort='+saved_sorting.sortCol;
+								}
+								if (saved_sorting.sortAsc)
+									url += '&order=ASC';
+							}
+
+						} catch (exception) {
+
+						}
+					}
+
 					window.open(url, win_name);
 					return false;
 				});
