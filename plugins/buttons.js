@@ -14,7 +14,8 @@ define(['jquery'], function ($) {
 			buttonsFormatter: false
 		};
 
-		_defaults.width = _defaults.iconWidth * options.buttons.length + _defaults.margin;
+		// Calculate icons width by icons that doesn't use deactivate or undelete classes
+		_defaults.width = _defaults.iconWidth * (options.buttons.filter(function(el){return ! el.class.match("deactivate|undelete")}).length) + _defaults.margin;
 
 		var _options = $.extend(true, {}, _defaults, options);
 
