@@ -188,6 +188,41 @@ define([
 					$('<h4 />').text(settings.title).prependTo($controls);
 				}
 
+				if (settings.enableBatchUpdate) {
+					var $gridTopButtons = $('<div class="grid-top-buttons" />'),
+						$batchUpdateBtn = $('<button class="batch-update btn btn-primary invisible">'+settings.batchUpdateButtonText+'</button>'),
+						checkedCount = 0;
+
+					// Setup "Batch Update" button
+					$batchUpdateBtn.on('click', function() {
+						var checkedValues = [];
+						$this.find('.batch:checked').each(function() {
+							checkedValues.push(this.value);
+						});
+						settings.onBatchUpdateClicked(checkedValues);
+						return false;
+					});
+
+					// Setup batch update checkboxes
+					$this.on('change', '.batch', function() {
+						if (this.checked) {
+							checkedCount++;
+							if (checkedCount > 0) {
+								$batchUpdateBtn.removeClass('invisible');
+							}
+						}
+						else {
+							checkedCount--;
+							if ( ! checkedCount) {
+								$batchUpdateBtn.addClass('invisible');
+							}
+						}
+					});
+
+					$gridTopButtons.append($batchUpdateBtn);
+					$controls.append($gridTopButtons);
+				}
+
 				var title    = $('h1:first').text(),
 					columns  = [],
 					endpoint = settings.model.getUrl(),
